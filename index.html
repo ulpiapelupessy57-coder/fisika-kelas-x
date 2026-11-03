@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif Fisika - Besaran dan Satuan | SMAS Alhilaal Tehoru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1E3E62',
+                            900: '#0B192C',
+                            950: '#060E1A',
+                        },
+                        cyan: {
+                            400: '#008DDA',
+                            500: '#00B4D8',
+                            600: '#0077B6',
+                        },
+                        amber: {
+                            400: '#FFD700',
+                            500: '#FF6500',
+                            600: '#E65100',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        /* Custom Print Styling */
+        @media print {
+            body { background: white !important; color: black !important; }
+            header, nav, #mobile-menu, .no-print { display: none !important; }
+            .section-page { display: block !important; }
+            #printable-area { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .cert-border {
+                border: 6px double #b8860b !important;
+                background: white !important;
+                color: black !important;
+            }
+            .cert-gold-text { color: #b8860b !important; }
+            .cert-print-container * { color: #000000 !important; }
+        }
+        .cert-border {
+            background: linear-gradient(135deg, #0B192C 0%, #1E3E62 50%, #0B192C 100%);
+            border: 8px double #FFD700;
+        }
+        .cert-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.04;
+            pointer-events: none;
+            font-size: 20rem;
+        }
+    </style>
+</head>
+<body class="bg-navy-900 text-slate-100 min-h-screen flex flex-col transition-colors duration-300 light:bg-slate-50 light:text-slate-800">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-700/50 light:border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- School Brand -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('beranda')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-amber-500 flex items-center justify-center text-navy-900 font-extrabold text-xl shadow-lg">
+                    <i class="fa-solid fa-atom"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-base font-extrabold text-white tracking-wide light:text-slate-900">SMAS ALHILAAL TEHORU</h1>
+                    <p class="text-[10px] text-cyan-400 font-semibold tracking-wider uppercase">Fisika Kelas X • Yusfyani Rahawarin, S.Pd.</p>
+                </div>
+            </div>
+
+            <!-- Header Controls & Nav Links -->
+            <div class="flex items-center gap-3">
+                <!-- Learning Progress Bar Indicator -->
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 light:bg-slate-200 light:border-slate-300 text-xs">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
+                    <span class="text-slate-300 light:text-slate-700 font-semibold">Progres:</span>
+                    <span id="progress-percent" class="font-bold text-amber-400">0%</span>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 flex items-center justify-center text-amber-400 transition" title="Ganti Mode Gelap/Terang">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+
+                <!-- Audio Toggle -->
+                <button onclick="toggleAudio()" id="audio-btn" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 light:bg-slate-200 light:hover:bg-slate-300 flex items-center justify-center text-cyan-400 transition" title="Suara Interaktif On/Off">
+                    <i id="audio-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+
+                <!-- Mobile Navigation Menu Toggle -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN NAVIGATION MENU BAR (Desktop) -->
+        <nav class="hidden lg:block border-t border-slate-800/80 light:border-slate-200 bg-navy-950/60 light:bg-slate-100">
+            <div class="max-w-7xl mx-auto px-4 flex items-center justify-between text-xs font-semibold uppercase tracking-wider overflow-x-auto">
+                <button onclick="navigateTo('beranda')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-cyan-400 border-b-2 border-cyan-400" data-target="beranda"><i class="fa-solid fa-house"></i> Beranda</button>
+                <button onclick="navigateTo('tujuan')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="tujuan"><i class="fa-solid fa-bullseye"></i> Tujuan</button>
+                <button onclick="navigateTo('materi')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="materi"><i class="fa-solid fa-book-open"></i> Materi</button>
+                <button onclick="navigateTo('virtual-lab')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="virtual-lab"><i class="fa-solid fa-flask"></i> Lab Virtual</button>
+                <button onclick="navigateTo('video')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="video"><i class="fa-solid fa-circle-play"></i> Video</button>
+                <button onclick="navigateTo('praktikum')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="praktikum"><i class="fa-solid fa-clipboard-check"></i> Praktikum</button>
+                <button onclick="navigateTo('kuis')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="kuis"><i class="fa-solid fa-circle-question"></i> Kuis Interaktif</button>
+                <button onclick="navigateTo('game')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="game"><i class="fa-solid fa-gamepad"></i> Game Edukasi</button>
+                <button onclick="navigateTo('evaluasi')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="evaluasi"><i class="fa-solid fa-award"></i> Evaluasi</button>
+                <button onclick="navigateTo('sertifikat')" class="nav-tab px-3 py-2.5 hover:text-amber-400 flex items-center gap-1.5 transition text-amber-400 font-semibold" data-target="sertifikat"><i class="fa-solid fa-certificate text-amber-400"></i> Sertifikat</button>
+                <button onclick="navigateTo('profil')" class="nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400" data-target="profil"><i class="fa-solid fa-user-tie"></i> Profil Guru</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MOBILE MENU DRAWER -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-navy-900/95 backdrop-blur-md pt-20 px-6 flex-col gap-3 lg:hidden overflow-y-auto">
+        <button onclick="navigateTo('beranda'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-house text-cyan-400"></i> Beranda</button>
+        <button onclick="navigateTo('tujuan'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-bullseye text-cyan-400"></i> Tujuan Pembelajaran</button>
+        <button onclick="navigateTo('materi'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-book-open text-cyan-400"></i> Materi Pembelajaran</button>
+        <button onclick="navigateTo('virtual-lab'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-flask text-cyan-400"></i> Laboratorium Virtual</button>
+        <button onclick="navigateTo('video'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-circle-play text-cyan-400"></i> Video Pembelajaran</button>
+        <button onclick="navigateTo('praktikum'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-clipboard-check text-cyan-400"></i> Eksperimen / Praktikum</button>
+        <button onclick="navigateTo('kuis'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-circle-question text-cyan-400"></i> Kuis Interaktif</button>
+        <button onclick="navigateTo('game'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-gamepad text-cyan-400"></i> Game Edukasi</button>
+        <button onclick="navigateTo('evaluasi'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-award text-cyan-400"></i> Evaluasi Akhir</button>
+        <button onclick="navigateTo('sertifikat'); toggleMobileMenu()" class="p-3 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-certificate"></i> Sertifikat Pembelajaran</button>
+        <button onclick="navigateTo('profil'); toggleMobileMenu()" class="p-3 rounded-xl bg-slate-800 text-left font-semibold flex items-center gap-3"><i class="fa-solid fa-user-tie text-cyan-400"></i> Profil Guru</button>
+        <button onclick="toggleMobileMenu()" class="mt-4 p-3 bg-red-500/20 text-red-400 rounded-xl font-bold">Tutup Menu</button>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- 1. BERANDA / HERO SECTION -->
+        <section id="sec-beranda" class="section-page space-y-8">
+            <div class="relative overflow-hidden glass-card rounded-3xl p-8 sm:p-12 border border-slate-700/60 shadow-2xl">
+                <!-- Background Glowing Orbs -->
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-graduation-cap"></i> Modul Digital Fisika Kelas X
+                        </div>
+                        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
+                            MEDIA PEMBELAJARAN INTERAKTIF <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-amber-400">BESARAN DAN SATUAN</span>
+                        </h1>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            Selamat datang di portal pembelajaran Fisika digital SMAS Alhilaal Tehoru. Jelajahi konsep pengukuran, laboratorium simulasi alat ukur virtual, permainan edukasi interaktif, hingga tes evaluasi kelulusan.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="navigateTo('materi')" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-navy-900 font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-rocket"></i> MULAI BELAJAR
+                            </button>
+                            <button onclick="openGuideModal()" class="px-6 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition">
+                                <i class="fa-solid fa-compass"></i> PETUNJUK PENGGUNAAN
+                            </button>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800 flex items-center gap-4 text-xs text-slate-400">
+                            <div><strong class="text-white">Guru Pengampu:</strong> Yusfyani Rahawarin, S.Pd.</div>
+                            <span>•</span>
+                            <div><strong class="text-white">Instansi:</strong> SMAS Alhilaal Tehoru</div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Graphics -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="w-full max-w-sm glass-card p-6 rounded-2xl border border-cyan-500/30 shadow-xl space-y-4 text-center">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-4xl border border-cyan-500/40 animate-pulse">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-white">Laboratorium Virtual Ready!</h3>
+                            <p class="text-xs text-slate-300">Simulasi interaktif Jangka Sorong ($0{,}01\text{ cm}$), Mikrometer Sekrup ($0{,}01\text{ mm}$), Neraca Ohauss 3 Lengan, dan Stopwatch.</p>
+                            <button onclick="navigateTo('virtual-lab')" class="w-full py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-bold text-xs border border-amber-500/40 flex items-center justify-center gap-2 transition">
+                                Coba Simulasi Alat Ukur <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TUJUAN PEMBELAJARAN SECTION -->
+        <section id="sec-tujuan" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-bullseye text-cyan-400"></i> Tujuan Pembelajaran & Capaian (IKTP)
+                </h2>
+                <p class="text-sm text-slate-400">Target kompetensi peserta didik kelas X SMAS Alhilaal Tehoru pada materi Besaran dan Satuan.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-cyan-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">1</div>
+                    <h3 class="font-bold text-white text-base">Memahami Konsep Besaran & Satuan</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Peserta didik mampu menjelaskan konsep besaran, nilai pengukuran, dan satuan baku/tidak baku secara tepat dan ilmiah.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">2</div>
+                    <h3 class="font-bold text-white text-base">7 Besaran Pokok & SI</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Peserta didik dapat mengidentifikasi 7 besaran pokok dalam Sistem Internasional (SI) beserta lambang besaran dan satuannya.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">3</div>
+                    <h3 class="font-bold text-white text-base">Besaran Turunan & Dimensi</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Mampu menganalisis rumus besaran turunan, menentukan satuan SI, dan menyusun persamaan dimensi besaran Fisika.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">4</div>
+                    <h3 class="font-bold text-white text-base">Keterampilan Alat Ukur</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Mahir menggunakan dan membaca skala alat ukur mistar, jangka sorong, mikrometer sekrup, neraca, dan stopwatch dengan teliti.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-rose-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">5</div>
+                    <h3 class="font-bold text-white text-base">Pengolahan Data & Eksperimen</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Mampu mencatat data pengukuran langsung di lingkungan sekolah Tehoru dan membuat laporan hasil praktikum sederhana.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-400 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">6</div>
+                    <h3 class="font-bold text-white text-base">Berpikir Kritis & Problem Solving</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Meningkatkan kemampuan pemecahan masalah melalui soal kuis interaktif, mini-game edukatif, dan evaluasi akhir digital.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MATERI PEMBELAJARAN SECTION -->
+        <section id="sec-materi" class="section-page space-y-8 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-book-open text-cyan-400"></i> Materi Pembelajaran Lengkap
+                </h2>
+                <p class="text-sm text-slate-400">Modul teori komprehensif Besaran, Satuan SI, Dimensi, dan Kalkulator Konversi.</p>
+            </div>
+
+            <!-- Subbab 1: Pengertian Besaran & Satuan -->
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark"></i> A. Pengertian Besaran dan Satuan
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Dalam Fisika, <strong>Besaran</strong> adalah segala sesuatu yang dapat diukur, memiliki nilai (angka), dan dapat dinyatakan dengan satuan. Sedangkan <strong>Satuan</strong> adalah pembanding yang digunakan dalam pengukuran besaran tersebut.
+                </p>
+                <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 text-xs sm:text-sm font-semibold text-cyan-300 flex items-center justify-between">
+                    <span>Formula Hasil Pengukuran:</span>
+                    <span class="code-font text-amber-400">Nilai Pengukuran = Angka (Nilai) + Satuan</span>
+                </div>
+            </div>
+
+            <!-- Subbab 2: Besaran Pokok Table -->
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-table"></i> B. Tujuh Besaran Pokok Sistem Internasional (SI)
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-300 border-collapse">
+                        <thead class="bg-slate-800 text-cyan-400 uppercase font-bold text-[11px]">
+                            <tr>
+                                <th class="p-3 border border-slate-700">No</th>
+                                <th class="p-3 border border-slate-700">Nama Besaran Pokok</th>
+                                <th class="p-3 border border-slate-700">Lambang Besaran</th>
+                                <th class="p-3 border border-slate-700">Satuan SI</th>
+                                <th class="p-3 border border-slate-700">Singkatan Satuan</th>
+                                <th class="p-3 border border-slate-700">Dimensi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">1</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Panjang</td>
+                                <td class="p-3 border border-slate-800 code-font">l</td>
+                                <td class="p-3 border border-slate-800">Meter</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">m</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[L]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">2</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Massa</td>
+                                <td class="p-3 border border-slate-800 code-font">m</td>
+                                <td class="p-3 border border-slate-800">Kilogram</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">kg</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[M]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">3</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Waktu</td>
+                                <td class="p-3 border border-slate-800 code-font">t</td>
+                                <td class="p-3 border border-slate-800">Sekon (Detik)</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">s</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[T]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">4</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Kuat Arus Listrik</td>
+                                <td class="p-3 border border-slate-800 code-font">I</td>
+                                <td class="p-3 border border-slate-800">Ampere</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">A</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[I]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">5</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Suhu Termodinamika</td>
+                                <td class="p-3 border border-slate-800 code-font">T</td>
+                                <td class="p-3 border border-slate-800">Kelvin</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">K</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[θ]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">6</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Jumlah Zat</td>
+                                <td class="p-3 border border-slate-800 code-font">n</td>
+                                <td class="p-3 border border-slate-800">Mol</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">mol</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[N]</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="p-3 border border-slate-800 font-bold">7</td>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Intensitas Cahaya</td>
+                                <td class="p-3 border border-slate-800 code-font">I_v</td>
+                                <td class="p-3 border border-slate-800">Kandela</td>
+                                <td class="p-3 border border-slate-800 code-font text-amber-400">cd</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[J]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subbab 3: Besaran Turunan -->
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes"></i> C. Besaran Turunan, Rumus, dan Dimensinya
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-300 border-collapse">
+                        <thead class="bg-slate-800 text-amber-400 uppercase font-bold text-[11px]">
+                            <tr>
+                                <th class="p-3 border border-slate-700">Besaran Turunan</th>
+                                <th class="p-3 border border-slate-700">Rumus Persamaan</th>
+                                <th class="p-3 border border-slate-700">Satuan SI</th>
+                                <th class="p-3 border border-slate-700">Dimensi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Luas (A)</td>
+                                <td class="p-3 border border-slate-800 code-font">panjang x lebar</td>
+                                <td class="p-3 border border-slate-800 code-font">m²</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[L]²</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Volume (V)</td>
+                                <td class="p-3 border border-slate-800 code-font">p x l x t</td>
+                                <td class="p-3 border border-slate-800 code-font">m³</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[L]³</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Kecepatan (v)</td>
+                                <td class="p-3 border border-slate-800 code-font">jarak / waktu</td>
+                                <td class="p-3 border border-slate-800 code-font">m/s</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[L][T]⁻¹</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Percepatan (a)</td>
+                                <td class="p-3 border border-slate-800 code-font">kecepatan / waktu</td>
+                                <td class="p-3 border border-slate-800 code-font">m/s²</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[L][T]⁻²</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Gaya (F)</td>
+                                <td class="p-3 border border-slate-800 code-font">massa x percepatan</td>
+                                <td class="p-3 border border-slate-800 code-font">kg·m/s² (Newton)</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[M][L][T]⁻²</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Usaha (W)</td>
+                                <td class="p-3 border border-slate-800 code-font">gaya x perpindahan</td>
+                                <td class="p-3 border border-slate-800 code-font">kg·m²/s² (Joule)</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[M][L]²[T]⁻²</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-slate-800 font-semibold text-white">Massa Jenis (ρ)</td>
+                                <td class="p-3 border border-slate-800 code-font">massa / volume</td>
+                                <td class="p-3 border border-slate-800 code-font">kg/m³</td>
+                                <td class="p-3 border border-slate-800 font-bold text-cyan-400">[M][L]⁻³</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subbab 4: Interaktif Kalkulator Konversi Satuan -->
+            <div class="glass-card p-6 rounded-2xl space-y-4 border border-cyan-500/30">
+                <h3 class="text-lg font-bold text-cyan-400 flex items-center gap-2">
+                    <i class="fa-solid fa-calculator"></i> D. Live Kalkulator Konversi Satuan Fisika
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Nilai Asal:</label>
+                        <input type="number" id="conv-val" value="1" oninput="convertUnit()" class="w-full px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white font-bold text-sm focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Dari Satuan:</label>
+                        <select id="conv-from" onchange="convertUnit()" class="w-full px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400">
+                            <option value="km">Kilometer (km)</option>
+                            <option value="m" selected>Meter (m)</option>
+                            <option value="cm">Sentimeter (cm)</option>
+                            <option value="mm">Milimeter (mm)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Ke Satuan SI / Pilihan:</label>
+                        <select id="conv-to" onchange="convertUnit()" class="w-full px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400">
+                            <option value="km">Kilometer (km)</option>
+                            <option value="m">Meter (m)</option>
+                            <option value="cm" selected>Sentimeter (cm)</option>
+                            <option value="mm">Milimeter (mm)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl bg-navy-950 border border-slate-800 flex items-center justify-between">
+                    <span class="text-xs text-slate-400">Hasil Konversi:</span>
+                    <span id="conv-result" class="text-lg font-black text-amber-400 code-font">1 m = 100 cm</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. LABORATORIUM VIRTUAL SECTION -->
+        <section id="sec-virtual-lab" class="section-page space-y-8 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-flask text-cyan-400"></i> Laboratorium Virtual Alat Ukur Fisika
+                </h2>
+                <p class="text-sm text-slate-400">Simulasi interaktif pembacaan skala jangka sorong, mikrometer sekrup, neraca, dan stopwatch.</p>
+            </div>
+
+            <!-- TAB SIMULATOR SELECTOR -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
+                <button onclick="switchLabTab('jangka')" class="lab-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-navy-900 font-extrabold text-xs" data-lab="jangka"><i class="fa-solid fa-ruler-horizontal"></i> Jangka Sorong</button>
+                <button onclick="switchLabTab('mikro')" class="lab-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-400 font-extrabold text-xs" data-lab="mikro"><i class="fa-solid fa-microchip"></i> Mikrometer Sekrup</button>
+                <button onclick="switchLabTab('neraca')" class="lab-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-400 font-extrabold text-xs" data-lab="neraca"><i class="fa-solid fa-scale-balanced"></i> Neraca Ohauss</button>
+                <button onclick="switchLabTab('stopwatch')" class="lab-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-400 font-extrabold text-xs" data-lab="stopwatch"><i class="fa-solid fa-stopwatch"></i> Stopwatch</button>
+            </div>
+
+            <!-- 1. JANGKA SORONG SIMULATOR -->
+            <div id="lab-jangka" class="lab-content glass-card p-6 rounded-2xl space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Simulasi Jangka Sorong (Ketelitian 0,01 cm / 0,1 mm)</h3>
+                        <p class="text-xs text-slate-400">Geser slider untuk mengubah posisi rahang geser dan baca hasilnya.</p>
+                    </div>
+                    <div class="px-4 py-2 rounded-xl bg-slate-800 border border-cyan-500/30 text-xs">
+                        <span class="text-slate-400">Nilai Slider:</span>
+                        <span id="jangka-val-lbl" class="font-bold text-cyan-400 code-font">2.45 cm</span>
+                    </div>
+                </div>
+
+                <!-- Canvas Visual Jangka Sorong -->
+                <div class="w-full overflow-x-auto bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-center">
+                    <svg id="svg-jangka" width="600" height="180" viewBox="0 0 600 180" class="max-w-full">
+                        <!-- Skala Utama Frame -->
+                        <rect x="20" y="40" width="560" height="50" fill="#1E293B" stroke="#475569" stroke-width="2" rx="4"/>
+                        <!-- Tanda Skala Utama (0 - 10 cm) -->
+                        <g id="svg-jangka-main-ticks"></g>
+                        <!-- Rahang Geser (Vernier/Nonius) -->
+                        <g id="svg-jangka-vernier">
+                            <rect x="0" y="30" width="120" height="90" fill="#0284C7" fill-opacity="0.8" stroke="#38BDF8" stroke-width="2" rx="6"/>
+                            <!-- Tanda Skala Nonius -->
+                            <g id="svg-jangka-nonius-ticks"></g>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Control Slider -->
+                <div class="space-y-2">
+                    <label class="text-xs text-slate-300 font-semibold">Geser Rahang Sorong:</label>
+                    <input type="range" id="jangka-slider" min="0" max="800" value="245" oninput="updateJangkaSim()" class="w-full accent-cyan-400 h-2 bg-slate-800 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- Explanation Box -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                        <span class="text-slate-400 block">Skala Utama (SU):</span>
+                        <span id="jangka-su" class="text-sm font-bold text-amber-400 code-font">2,40 cm</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                        <span class="text-slate-400 block">Skala Nonius (SN):</span>
+                        <span id="jangka-sn" class="text-sm font-bold text-cyan-400 code-font">5 x 0,01 = 0,05 cm</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-cyan-500/20 border border-cyan-500/40">
+                        <span class="text-slate-300 block font-semibold">Total Pembacaan:</span>
+                        <span id="jangka-total" class="text-base font-black text-white code-font">2,45 cm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. MIKROMETER SEKRUP SIMULATOR -->
+            <div id="lab-mikro" class="lab-content glass-card p-6 rounded-2xl space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Simulasi Mikrometer Sekrup (Ketelitian 0,01 mm)</h3>
+                        <p class="text-xs text-slate-400">Putar atau geser selubung luar untuk membaca ketebalan benda tipis.</p>
+                    </div>
+                    <div class="px-4 py-2 rounded-xl bg-slate-800 border border-amber-500/30 text-xs">
+                        <span class="text-slate-400">Nilai Mikrometer:</span>
+                        <span id="mikro-val-lbl" class="font-bold text-amber-400 code-font">4.38 mm</span>
+                    </div>
+                </div>
+
+                <div class="w-full overflow-x-auto bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-center">
+                    <svg id="svg-mikro" width="550" height="180" viewBox="0 0 550 180" class="max-w-full">
+                        <!-- Frame C Mikrometer -->
+                        <path d="M 50 20 L 50 160 L 150 160 C 220 160 220 20 150 20 Z" fill="none" stroke="#334155" stroke-width="20"/>
+                        <!-- Anvil & Spindle -->
+                        <rect x="130" y="80" width="100" height="20" fill="#64748B"/>
+                        <!-- Main Sleeve -->
+                        <rect x="230" y="70" width="160" height="40" fill="#1E293B" stroke="#475569" stroke-width="2"/>
+                        <!-- Main Scale Line -->
+                        <line x1="240" y1="90" x2="380" y2="90" stroke="#00B4D8" stroke-width="2"/>
+                        <g id="svg-mikro-main-ticks"></g>
+                        <!-- Thimble (Selubung Putar) -->
+                        <g id="svg-mikro-thimble">
+                            <rect x="330" y="55" width="90" height="70" fill="#0284C7" fill-opacity="0.9" stroke="#38BDF8" stroke-width="2" rx="4"/>
+                            <g id="svg-mikro-thimble-ticks"></g>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs text-slate-300 font-semibold">Putar Selubung Mikrometer:</label>
+                    <input type="range" id="mikro-slider" min="0" max="1000" value="438" oninput="updateMikroSim()" class="w-full accent-amber-400 h-2 bg-slate-800 rounded-lg cursor-pointer">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                        <span class="text-slate-400 block">Skala Utama (SU):</span>
+                        <span id="mikro-su" class="text-sm font-bold text-amber-400 code-font">4,00 mm</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
+                        <span class="text-slate-400 block">Skala Nonius (SN):</span>
+                        <span id="mikro-sn" class="text-sm font-bold text-cyan-400 code-font">38 x 0,01 = 0,38 mm</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-amber-500/20 border border-amber-500/40">
+                        <span class="text-slate-300 block font-semibold">Hasil Pengukuran:</span>
+                        <span id="mikro-total" class="text-base font-black text-white code-font">4,38 mm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. NERACA OHAUSS SIMULATOR -->
+            <div id="lab-neraca" class="lab-content glass-card p-6 rounded-2xl space-y-6 hidden">
+                <h3 class="font-bold text-white text-lg">Simulasi Neraca Ohauss 3 Lengan</h3>
+                <p class="text-xs text-slate-400">Geser beban pemberat pada Lengan Ratusan (100g), Puluhan (10g), dan Satuan (1g).</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs text-slate-300 font-semibold block mb-1">Lengan 100 gram (Ratusan):</label>
+                        <input type="range" id="neraca-100" min="0" max="500" step="100" value="200" oninput="updateNeracaSim()" class="w-full accent-cyan-400">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-300 font-semibold block mb-1">Lengan 10 gram (Puluhan):</label>
+                        <input type="range" id="neraca-10" min="0" max="100" step="10" value="40" oninput="updateNeracaSim()" class="w-full accent-cyan-400">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-300 font-semibold block mb-1">Lengan 1 gram (Satuan/Desimal):</label>
+                        <input type="range" id="neraca-1" min="0" max="10" step="0.1" value="5.6" oninput="updateNeracaSim()" class="w-full accent-amber-400">
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-navy-950 border border-cyan-500/40 flex justify-between items-center">
+                    <span class="text-xs text-slate-300">Total Massa Benda Terukur:</span>
+                    <span id="neraca-total" class="text-xl font-black text-amber-400 code-font">245,6 gram (0,2456 kg)</span>
+                </div>
+            </div>
+
+            <!-- 4. STOPWATCH SIMULATOR -->
+            <div id="lab-stopwatch" class="lab-content glass-card p-6 rounded-2xl space-y-6 hidden text-center">
+                <h3 class="font-bold text-white text-lg">Stopwatch Digital Interaktif</h3>
+                
+                <div class="text-5xl sm:text-6xl font-black text-cyan-400 code-font my-6 tracking-widest bg-slate-950 p-6 rounded-2xl border border-slate-800 inline-block">
+                    <span id="sw-time">00:00.00</span>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button onclick="startStopwatch()" class="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-900 font-black text-xs uppercase tracking-wider"><i class="fa-solid fa-play"></i> Start</button>
+                    <button onclick="pauseStopwatch()" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-900 font-black text-xs uppercase tracking-wider"><i class="fa-solid fa-pause"></i> Pause</button>
+                    <button onclick="resetStopwatch()" class="px-6 py-2.5 rounded-xl bg-red-500 hover:bg-red-400 text-white font-black text-xs uppercase tracking-wider"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. VIDEO PEMBELAJARAN SECTION -->
+        <section id="sec-video" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-circle-play text-cyan-400"></i> Video Pembelajaran Fisika
+                </h2>
+                <p class="text-sm text-slate-400">Media audio-visual pendukung pemahaman konsep Besaran, Satuan SI, dan Alat Ukur.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-8 glass-card p-4 rounded-2xl border border-slate-700/60 space-y-3">
+                    <div class="relative w-full pb-[56.25%] h-0 rounded-xl overflow-hidden bg-slate-950">
+                        <iframe id="youtube-player" class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Fisika Besaran dan Satuan" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 text-xs text-slate-400">
+                        <span><i class="fa-solid fa-chalkboard-user text-cyan-400"></i> Disusun oleh Yusfyani Rahawarin, S.Pd.</span>
+                        <span class="text-amber-400 font-semibold">SMAS Alhilaal Tehoru</span>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 glass-card p-6 rounded-2xl space-y-4">
+                    <h3 class="font-bold text-white text-base">Ganti Link Video YouTube:</h3>
+                    <p class="text-xs text-slate-300">Masukkan ID atau Tautan Video YouTube untuk mengganti media tayang kelas:</p>
+                    <input type="text" id="yt-url-input" placeholder="Contoh: dQw4w9WgXcQ..." class="w-full px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    <button onclick="updateVideoUrl()" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-bold text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-sync"></i> Tampilkan Video
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PRAKTIKUM / EXPERIMENT SECTION -->
+        <section id="sec-praktikum" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-clipboard-check text-cyan-400"></i> LKPD Eksperimen & Praktikum Sederhana
+                    </h2>
+                    <p class="text-sm text-slate-400">Lembar Kerja Pengukuran Benda Kontekstual di Lingkungan SMAS Alhilaal Tehoru.</p>
+                </div>
+                <button onclick="window.print()" class="no-print px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-900 font-extrabold text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak Laporan LKPD
+                </button>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white text-base">Tabel Hasil Pengamatan Praktikum Siswa:</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left text-slate-300 border-collapse">
+                        <thead class="bg-slate-800 text-cyan-400 font-bold uppercase">
+                            <tr>
+                                <th class="p-3 border border-slate-700">Nama Objek Benda</th>
+                                <th class="p-3 border border-slate-700">Besaran</th>
+                                <th class="p-3 border border-slate-700">Alat Ukur</th>
+                                <th class="p-3 border border-slate-700">Hasil (Satuan Baku)</th>
+                                <th class="p-3 border border-slate-700">Hasil (Satuan Tidak Baku)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Panjang Meja Kelas" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Panjang" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Mistar" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="1,2 Meter" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="6 Jengkal" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Diameter Koin Rupiah" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Panjang" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="Jangka Sorong" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="2,45 cm" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                                <td class="p-2 border border-slate-800"><input type="text" value="1 Ruas Jari" class="w-full bg-slate-900 px-2 py-1 rounded text-white border border-slate-700"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. KUIS INTERAKTIF SECTION -->
+        <section id="sec-kuis" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-circle-question text-cyan-400"></i> Kuis Interaktif (10 Soal)
+                    </h2>
+                    <p class="text-sm text-slate-400">Uji pemahaman cepat Anda sebelum melakukan Evaluasi Akhir.</p>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-slate-800 border border-amber-500/30 text-amber-400 font-extrabold text-sm code-font">
+                    <span id="quiz-score-lbl">Skor: 0</span>
+                </div>
+            </div>
+
+            <!-- Active Quiz Box -->
+            <div id="quiz-card" class="glass-card p-6 rounded-2xl space-y-6">
+                <div class="flex justify-between text-xs text-cyan-400 font-bold uppercase tracking-wider">
+                    <span id="quiz-q-num">Soal 1 dari 10</span>
+                    <span>Modul Besaran & Satuan</span>
+                </div>
+
+                <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-white">
+                    Loading soal kuis...
+                </h3>
+
+                <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Options inserted via JS -->
+                </div>
+
+                <!-- Feedback Box -->
+                <div id="quiz-feedback-box" class="hidden p-4 rounded-xl text-xs sm:text-sm"></div>
+
+                <!-- Next Question Button -->
+                <div class="flex justify-end pt-4 border-t border-slate-800 gap-3">
+                    <button id="quiz-cert-btn" onclick="navigateTo('sertifikat')" class="hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-navy-900 font-black text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-certificate"></i> Klaim Sertifikat
+                    </button>
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-black text-xs uppercase tracking-wider">
+                        Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. GAME EDUKASI SECTION -->
+        <section id="sec-game" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-gamepad text-cyan-400"></i> Mini Game Edukasi Fisika
+                </h2>
+                <p class="text-sm text-slate-400">Bermain sambil belajar pencocokan besaran, satuan SI, dan pengelompokan dimensi.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl text-center space-y-4 border border-cyan-500/30">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-cyan-500/20 text-cyan-400 text-3xl flex items-center justify-center">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">1. Match Besaran & Satuan</h3>
+                    <p class="text-xs text-slate-300">Cocokkan nama besaran dengan satuan SI yang tepat.</p>
+                    <button onclick="playMatchGame()" class="w-full py-2.5 rounded-xl bg-cyan-500 text-navy-900 font-extrabold text-xs uppercase">Main Sekarang</button>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl text-center space-y-4 border border-amber-500/30">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-amber-500/20 text-amber-400 text-3xl flex items-center justify-center">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">2. Sort Pokok vs Turunan</h3>
+                    <p class="text-xs text-slate-300">Kelompokkan besaran fisik ke dalam kategori yang sesuai.</p>
+                    <button onclick="playSortGame()" class="w-full py-2.5 rounded-xl bg-amber-500 text-navy-900 font-extrabold text-xs uppercase">Main Sekarang</button>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl text-center space-y-4 border border-emerald-500/30">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 text-3xl flex items-center justify-center">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">3. Flashcard Satuan SI</h3>
+                    <p class="text-xs text-slate-300">Tebak kilat simbol dan dimensi besaran Fisika.</p>
+                    <button onclick="playFlashGame()" class="w-full py-2.5 rounded-xl bg-emerald-500 text-navy-900 font-extrabold text-xs uppercase">Main Sekarang</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. EVALUASI AKHIR SECTION -->
+        <section id="sec-evaluasi" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-award text-cyan-400"></i> Evaluasi Akhir (15 Soal)
+                    </h2>
+                    <p class="text-sm text-slate-400">Ujian komprehensif penentu kelulusan modul Besaran dan Satuan.</p>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/40 text-red-400 font-bold text-sm code-font flex items-center gap-2">
+                    <i class="fa-solid fa-clock"></i> <span id="eval-timer">30:00</span>
+                </div>
+            </div>
+
+            <!-- Active Evaluation Box -->
+            <div id="eval-start-box" class="glass-card p-8 rounded-2xl text-center space-y-4">
+                <i class="fa-solid fa-file-signature text-5xl text-amber-400"></i>
+                <h3 class="text-xl font-bold text-white">Siap Memulai Evaluasi Akhir?</h3>
+                <p class="text-xs text-slate-300 max-w-md mx-auto">
+                    Ujian terdiri dari 15 soal pilihan ganda mencakup konsep besaran pokok, turunan, dimensi, konversi satuan, dan pembacaan alat ukur.
+                </p>
+                <button onclick="startEvaluation()" class="px-8 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-navy-900 font-black text-sm uppercase tracking-wider shadow-lg">
+                    Mulai Evaluasi Sekarang
+                </button>
+            </div>
+
+            <div id="eval-quiz-box" class="glass-card p-6 rounded-2xl space-y-6 hidden">
+                <div class="flex justify-between text-xs text-cyan-400 font-bold uppercase tracking-wider">
+                    <span id="eval-q-num">Soal 1 dari 15</span>
+                    <span>Evaluasi Kelulusan</span>
+                </div>
+
+                <h3 id="eval-question-text" class="text-base sm:text-lg font-bold text-white">Loading...</h3>
+
+                <div id="eval-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+                <div class="flex justify-end pt-4 border-t border-slate-800">
+                    <button id="eval-next-btn" onclick="nextEvalQuestion()" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-black text-xs uppercase tracking-wider">
+                        Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Box -->
+            <div id="eval-result-box" class="glass-card p-8 rounded-2xl text-center space-y-6 hidden">
+                <i class="fa-solid fa-trophy text-6xl text-amber-400 animate-bounce"></i>
+                <h3 class="text-2xl font-black text-white">Hasil Evaluasi Akhir Anda</h3>
+                
+                <div class="grid grid-cols-3 gap-4 max-w-md mx-auto my-6 text-center">
+                    <div class="p-4 bg-slate-800 rounded-xl">
+                        <span class="text-xs text-slate-400 block">Skor Akhir</span>
+                        <span id="eval-score-num" class="text-3xl font-black text-amber-400">0</span>
+                    </div>
+                    <div class="p-4 bg-slate-800 rounded-xl">
+                        <span class="text-xs text-slate-400 block">Benar</span>
+                        <span id="eval-correct-num" class="text-3xl font-black text-emerald-400">0</span>
+                    </div>
+                    <div class="p-4 bg-slate-800 rounded-xl">
+                        <span class="text-xs text-slate-400 block">Salah</span>
+                        <span id="eval-wrong-num" class="text-3xl font-black text-red-400">0</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button onclick="navigateTo('sertifikat')" class="no-print px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-900 font-extrabold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-certificate"></i> Lihat & Cetak Sertifikat Kelulusan
+                    </button>
+                    <button onclick="window.print()" class="no-print px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-bold text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> Cetak Ringkasan Nilai
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9.5 MODUL SERTIFIKAT PEMBELAJARAN (NEW SECTION) -->
+        <section id="sec-sertifikat" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-certificate text-amber-400"></i> Sertifikat Pembelajaran Digital
+                    </h2>
+                    <p class="text-sm text-slate-400">Sertifikat Resmi Penyelesaian Materi Besaran & Satuan - SMAS Alhilaal Tehoru.</p>
+                </div>
+                <button onclick="window.print()" class="no-print px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-navy-900 font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-print"></i> Cetak / Unduh PDF Sertifikat
+                </button>
+            </div>
+
+            <!-- Identitas Siswa Form Input -->
+            <div class="glass-card p-6 rounded-2xl space-y-4 no-print border border-amber-500/30">
+                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-amber-400"></i> Identitas Penerima Sertifikat
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs text-slate-400 font-semibold mb-1 block">Nama Lengkap Peserta Didik:</label>
+                        <input type="text" id="cert-student-name" oninput="updateCertData()" value="Ahmad Farhan" placeholder="Masukkan Nama Lengkap Anda..." class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 font-semibold mb-1 block">Kelas / Satuan Pendidikan:</label>
+                        <input type="text" id="cert-student-class" oninput="updateCertData()" value="X IPA 1 - SMAS Alhilaal Tehoru" placeholder="Contoh: X IPA 1..." class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                </div>
+            </div>
+
+            <!-- DISPLAY SERTIFIKAT PREVIEW CARD -->
+            <div id="printable-area">
+                <div class="relative overflow-hidden rounded-3xl cert-border cert-print-container p-8 sm:p-14 text-center space-y-6 shadow-2xl my-4">
+                    <!-- Watermark -->
+                    <div class="cert-watermark text-cyan-500">
+                        <i class="fa-solid fa-atom"></i>
+                    </div>
+
+                    <!-- Certificate Header -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-center gap-3 mb-2">
+                            <div class="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 text-2xl border border-amber-500/40">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-xs sm:text-sm uppercase tracking-widest font-black text-amber-400 cert-gold-text">SMAS ALHILAAL TEHORU</h4>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white uppercase font-serif">SERTIFIKAT KELULUSAN</h2>
+                        <p class="text-xs text-slate-400 italic">Nomor: 421.3/FIS-X/TEHORU/<span id="cert-date-num">2026</span></p>
+                    </div>
+
+                    <!-- Certificate Body Statement -->
+                    <div class="max-w-2xl mx-auto space-y-4 py-2">
+                        <p class="text-xs sm:text-sm text-slate-300">Diberikan secara resmi kepada:</p>
+                        <h3 id="cert-display-name" class="text-2xl sm:text-3xl font-black text-cyan-400 uppercase tracking-wide border-b border-dashed border-amber-500/40 pb-2 inline-block px-8">
+                            AHMAD FARHAN
+                        </h3>
+                        <p id="cert-display-class" class="text-xs sm:text-sm text-amber-300 font-semibold">
+                            Kelas: X IPA 1 - SMAS Alhilaal Tehoru
+                        </p>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed pt-2">
+                            Telah berhasil menyelesaikan seluruh rangkaian Pembelajaran Digital, Laboratorium Virtual, Kuis Interaktif, dan Evaluasi Akhir pada Mata Pelajaran <strong>FISIKA</strong> dengan Materi Utama <strong>BESARAN DAN SATUAN</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Scores & Predicate Badge -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto py-3">
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold">Skor Kuis Interaktif</span>
+                            <span id="cert-quiz-score" class="text-xl font-black text-cyan-400 code-font">100 / 100</span>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold">Nilai Evaluasi Akhir</span>
+                            <span id="cert-eval-score" class="text-xl font-black text-amber-400 code-font">93.3</span>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-amber-500/40">
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold">Predikat Kelulusan</span>
+                            <span id="cert-predicate" class="text-base font-black text-emerald-400">SANGAT BAIK</span>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Signatures Footer -->
+                    <div class="pt-8 flex flex-col sm:flex-row justify-between items-end gap-6 text-xs text-slate-300 max-w-3xl mx-auto border-t border-slate-800">
+                        <!-- School Stamp Left -->
+                        <div class="text-center sm:text-left space-y-1">
+                            <p class="text-[10px] text-slate-400">Tehoru, <span id="cert-date-text">3 November 2026</span></p>
+                            <p class="font-bold text-white">SMAS Alhilaal Tehoru</p>
+                            <div class="w-20 h-20 mx-auto sm:mx-0 rounded-full border-2 border-dashed border-cyan-500/40 flex items-center justify-center my-2 text-[10px] text-cyan-400 font-bold uppercase rotate-[-12deg]">
+                                STEMPEL RESMI
+                            </div>
+                        </div>
+
+                        <!-- Teacher Signature Right -->
+                        <div class="text-center sm:text-right space-y-1">
+                            <p class="text-[10px] text-slate-400">Guru Pengampu Fisika,</p>
+                            <div class="h-12 flex items-center justify-center sm:justify-end">
+                                <span class="font-serif italic text-lg font-bold text-amber-400 underline decoration-amber-500/50">Yusfyani Rahawarin</span>
+                            </div>
+                            <p class="font-bold text-white">Yusfyani Rahawarin, S.Pd.</p>
+                            <p class="text-[10px] text-slate-400">NIP / NPT. SMAS Alhilaal Tehoru</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. PROFIL GURU & SEKOLAH SECTION -->
+        <section id="sec-profil" class="section-page space-y-6 hidden">
+            <div class="border-b border-slate-700/50 pb-4">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-user-tie text-cyan-400"></i> Profil Guru & Pengembang
+                </h2>
+                <p class="text-sm text-slate-400">Informasi Pendidik Pengampu Mata Pelajaran Fisika SMAS Alhilaal Tehoru.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl max-w-2xl mx-auto space-y-6 text-center border border-cyan-500/30">
+                <div class="w-28 h-28 mx-auto rounded-full bg-gradient-to-tr from-cyan-500 to-amber-500 p-1 shadow-xl">
+                    <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-4xl text-cyan-400">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <h3 class="text-2xl font-black text-white">Yusfyani Rahawarin, S.Pd.</h3>
+                    <p class="text-sm text-amber-400 font-semibold">Guru Pengampu Fisika SMA Kelas X</p>
+                    <p class="text-xs text-slate-400">SMAS Alhilaal Tehoru, Maluku Tengah</p>
+                </div>
+
+                <p class="text-xs text-slate-300 leading-relaxed pt-2 border-t border-slate-800">
+                    Website Media Pembelajaran Interaktif ini dikembangkan sebagai sarana inovasi pembelajaran digital berkonteks lokal untuk meningkatkan keaktifan, pemahaman konsep Fisika, dan keterampilan praktikum siswa kelas X.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-slate-800/80 bg-navy-950/80 py-6 text-xs text-slate-400 text-center no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
+            <p>© 2026 <strong>SMAS Alhilaal Tehoru</strong>. Media Pembelajaran Interaktif Fisika.</p>
+            <p class="text-[10px] text-slate-500">Dikembangkan oleh Yusfyani Rahawarin, S.Pd. | Besaran dan Satuan Kelas X</p>
+        </div>
+    </footer>
+
+    <!-- GUIDE MODAL DIALOG -->
+    <div id="guide-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full p-6 rounded-2xl space-y-4 border border-cyan-500/40">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-compass text-cyan-400"></i> Petunjuk Navigasi Media
+            </h3>
+            <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside leading-relaxed">
+                <li>Gunakan <strong>Menu Navigasi</strong> di bagian atas untuk berpindah subbab.</li>
+                <li>Buka modul <strong>Laboratorium Virtual</strong> untuk berlatih membaca Jangka Sorong dan Mikrometer Sekrup.</li>
+                <li>Isi lembar pengamatan pada tab <strong>Praktikum / LKPD</strong>.</li>
+                <li>Uji pemahaman Anda melalui <strong>Kuis Interaktif</strong> dan <strong>Game Edukasi</strong>.</li>
+                <li>Selesaikan <strong>Evaluasi Akhir</strong> untuk mengklaim <strong>Sertifikat Kelulusan Resmi</strong>.</li>
+            </ul>
+            <button onclick="closeGuideModal()" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-extrabold text-xs uppercase">
+                Saya Mengerti
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC ENGINE -->
+    <script>
+        /* APPLICATION GLOBAL STATE */
+        const APP_STATE = {
+            currentTab: 'beranda',
+            completedTabs: new Set(['beranda']),
+            audioMuted: false,
+            quizIndex: 0,
+            quizScore: 0,
+            evalIndex: 0,
+            evalScore: 0,
+            evalCorrect: 0,
+            evalWrong: 0,
+            evalTimerSeconds: 1800,
+            evalTimerInterval: null
+        };
+
+        const SECTIONS = ['beranda', 'tujuan', 'materi', 'virtual-lab', 'video', 'praktikum', 'kuis', 'game', 'evaluasi', 'sertifikat', 'profil'];
+
+        /* AUDIO SYNTHESIZER (Web Audio API) */
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playClick() {
+                if (APP_STATE.audioMuted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            },
+            playCorrect() {
+                if (APP_STATE.audioMuted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            },
+            playWrong() {
+                if (APP_STATE.audioMuted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(180, this.ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            }
+        };
+
+        /* NAVIGATION CONTROLLER */
+        function navigateTo(tabId) {
+            AudioFX.playClick();
+            APP_STATE.currentTab = tabId;
+            APP_STATE.completedTabs.add(tabId);
+            updateProgress();
+
+            SECTIONS.forEach(sec => {
+                const el = document.getElementById(`sec-${sec}`);
+                if (el) el.classList.add('hidden');
+            });
+
+            const activeEl = document.getElementById(`sec-${tabId}`);
+            if (activeEl) activeEl.classList.remove('hidden');
+
+            // Update Tab Highlights
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                if (tab.getAttribute('data-target') === tabId) {
+                    tab.className = "nav-tab px-3 py-2.5 text-cyan-400 border-b-2 border-cyan-400 flex items-center gap-1.5 transition font-bold";
+                } else {
+                    tab.className = "nav-tab px-3 py-2.5 hover:text-cyan-400 flex items-center gap-1.5 transition text-slate-400";
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const pct = Math.round((APP_STATE.completedTabs.size / SECTIONS.length) * 100);
+            document.getElementById('progress-percent').innerText = `${pct}%`;
+            localStorage.setItem('alhilaal_fisika_progress', JSON.stringify(Array.from(APP_STATE.completedTabs)));
+        }
+
+        function toggleTheme() {
+            AudioFX.playClick();
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = "fa-solid fa-sun";
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = "fa-solid fa-moon";
+            }
+        }
+
+        function toggleAudio() {
+            APP_STATE.audioMuted = !APP_STATE.audioMuted;
+            const btn = document.getElementById('audio-icon');
+            btn.className = APP_STATE.audioMuted ? "fa-solid fa-volume-xmark text-red-400" : "fa-solid fa-volume-high text-cyan-400";
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        function openGuideModal() {
+            AudioFX.playClick();
+            document.getElementById('guide-modal').classList.remove('hidden');
+        }
+
+        function closeGuideModal() {
+            AudioFX.playClick();
+            document.getElementById('guide-modal').classList.add('hidden');
+        }
+
+        /* CONVERTER CALCULATOR */
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('conv-val').value) || 0;
+            const from = document.getElementById('conv-from').value;
+            const to = document.getElementById('conv-to').value;
+
+            // Base in Meters
+            const toMeter = { km: 1000, m: 1, cm: 0.01, mm: 0.001 };
+            const inMeters = val * toMeter[from];
+            const result = inMeters / toMeter[to];
+
+            document.getElementById('conv-result').innerText = `${val} ${from} = ${result.toLocaleString('id-ID')} ${to}`;
+        }
+
+        /* VIRTUAL LAB SIMULATORS */
+        function switchLabTab(labId) {
+            AudioFX.playClick();
+            document.querySelectorAll('.lab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.lab-tab-btn').forEach(b => {
+                b.className = "lab-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-400 font-extrabold text-xs";
+            });
+
+            document.getElementById(`lab-${labId}`).classList.remove('hidden');
+            const activeBtn = document.querySelector(`[data-lab="${labId}"]`);
+            if (activeBtn) activeBtn.className = "lab-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-navy-900 font-extrabold text-xs";
+        }
+
+        /* 1. JANGKA SORONG LOGIC */
+        function updateJangkaSim() {
+            const rawVal = parseInt(document.getElementById('jangka-slider').value); // 0 to 800 (0 to 8.00 cm)
+            const cmVal = (rawVal / 100).toFixed(2);
+            document.getElementById('jangka-val-lbl').innerText = `${cmVal} cm`;
+
+            const suVal = (Math.floor(rawVal / 10) / 10).toFixed(2);
+            const snIndex = rawVal % 10;
+            const snVal = (snIndex * 0.01).toFixed(2);
+
+            document.getElementById('jangka-su').innerText = `${suVal.replace('.', ',')} cm`;
+            document.getElementById('jangka-sn').innerText = `${snIndex} x 0,01 = ${snVal.replace('.', ',')} cm`;
+            document.getElementById('jangka-total').innerText = `${cmVal.replace('.', ',')} cm`;
+
+            // SVG Animation Shift
+            const vernierGroup = document.getElementById('svg-jangka-vernier');
+            if (vernierGroup) {
+                const shiftPx = 40 + (rawVal * 0.6);
+                vernierGroup.setAttribute('transform', `translate(${shiftPx}, 0)`);
+            }
+        }
+
+        /* 2. MIKROMETER SEKRUP LOGIC */
+        function updateMikroSim() {
+            const rawVal = parseInt(document.getElementById('mikro-slider').value); // 0 to 1000 (0 to 10.00 mm)
+            const mmVal = (rawVal / 100).toFixed(2);
+            document.getElementById('mikro-val-lbl').innerText = `${mmVal} mm`;
+
+            const suVal = (Math.floor(rawVal / 50) * 0.5).toFixed(2);
+            const snIndex = Math.round((rawVal % 50));
+            const snVal = (snIndex * 0.01).toFixed(2);
+
+            document.getElementById('mikro-su').innerText = `${suVal.replace('.', ',')} mm`;
+            document.getElementById('mikro-sn').innerText = `${snIndex} x 0,01 = ${snVal.replace('.', ',')} mm`;
+            document.getElementById('mikro-total').innerText = `${mmVal.replace('.', ',')} mm`;
+
+            const thimbleGroup = document.getElementById('svg-mikro-thimble');
+            if (thimbleGroup) {
+                const shiftPx = (rawVal * 0.1);
+                thimbleGroup.setAttribute('transform', `translate(${shiftPx}, 0)`);
+            }
+        }
+
+        /* 3. NERACA OHAUSS LOGIC */
+        function updateNeracaSim() {
+            const v100 = parseFloat(document.getElementById('neraca-100').value);
+            const v10 = parseFloat(document.getElementById('neraca-10').value);
+            const v1 = parseFloat(document.getElementById('neraca-1').value);
+
+            const totalGram = (v100 + v10 + v1).toFixed(1);
+            const totalKg = (totalGram / 1000).toFixed(4);
+
+            document.getElementById('neraca-total').innerText = `${totalGram.replace('.', ',')} gram (${totalKg.replace('.', ',')} kg)`;
+        }
+
+        /* 4. STOPWATCH LOGIC */
+        let swInterval = null;
+        let swMs = 0;
+
+        function startStopwatch() {
+            AudioFX.playClick();
+            if (!swInterval) {
+                swInterval = setInterval(() => {
+                    swMs += 10;
+                    const sec = Math.floor(swMs / 1000);
+                    const min = Math.floor(sec / 60);
+                    const remSec = sec % 60;
+                    const remMs = Math.floor((swMs % 1000) / 10);
+                    document.getElementById('sw-time').innerText = 
+                        `${String(min).padStart(2,'0')}:${String(remSec).padStart(2,'0')}.${String(remMs).padStart(2,'0')}`;
+                }, 10);
+            }
+        }
+
+        function pauseStopwatch() {
+            AudioFX.playClick();
+            clearInterval(swInterval);
+            swInterval = null;
+        }
+
+        function resetStopwatch() {
+            AudioFX.playClick();
+            pauseStopwatch();
+            swMs = 0;
+            document.getElementById('sw-time').innerText = "00:00.00";
+        }
+
+        /* VIDEO HUB UPDATE */
+        function updateVideoUrl() {
+            const input = document.getElementById('yt-url-input').value.trim();
+            if (input) {
+                let vidId = input;
+                if (input.includes('v=')) {
+                    vidId = input.split('v=')[1].split('&')[0];
+                }
+                document.getElementById('youtube-player').src = `https://www.youtube.com/embed/${vidId}`;
+            }
+        }
+
+        /* KUIS INTERAKTIF DATA & LOGIC */
+        const QUIZ_DATA = [
+            {
+                q: "Besaran yang satuannya telah ditetapkan terlebih dahulu dan tidak diturunkan dari besaran lain disebut...",
+                ops: ["A. Besaran Turunan", "B. Besaran Pokok", "C. Besaran Skalar", "D. Besaran Vektor"],
+                ans: 1,
+                exp: "Besaran Pokok adalah besaran dasar yang satuannya ditetapkan secara internasional (SI)."
+            },
+            {
+                q: "Di antara kelompok besaran berikut, manakah yang seluruhnya merupakan besaran pokok?",
+                ops: ["A. Panjang, Massa, Waktu", "B. Kecepatan, Gaya, Suhu", "C. Luas, Volume, Massa", "D. Usaha, Daya, Kuat Arus"],
+                ans: 0,
+                exp: "Panjang, Massa, dan Waktu adalah bagian dari 7 besaran pokok Sistem Internasional."
+            },
+            {
+                q: "Satuan Sistem Internasional (SI) untuk besaran suhu termodinamika adalah...",
+                ops: ["A. Celcius (°C)", "B. Fahrenheit (°F)", "C. Kelvin (K)", "D. Reamur (°R)"],
+                ans: 2,
+                exp: "Kelvin (K) adalah satuan baku SI untuk suhu."
+            },
+            {
+                q: "Dimensi dari besaran Gaya (F = m x a) dalam Fisika adalah...",
+                ops: ["A. [M][L][T]⁻¹", "B. [M][L][T]⁻²", "C. [M][L]²[T]⁻²", "D. [L][T]⁻²"],
+                ans: 1,
+                exp: "Gaya = kg · m/s² -> [M][L][T]⁻²."
+            },
+            {
+                q: "Alat ukur yang memiliki tingkat ketelitian sebesar 0,01 mm adalah...",
+                ops: ["A. Mistar Plastik", "B. Jangka Sorong", "C. Mikrometer Sekrup", "D. Meteran Rol"],
+                ans: 2,
+                exp: "Mikrometer sekrup memilliki ketelitian paling tinggi yaitu 0,01 mm."
+            }
+        ];
+
+        function loadQuizQuestion() {
+            const data = QUIZ_DATA[APP_STATE.quizIndex];
+            document.getElementById('quiz-q-num').innerText = `Soal ${APP_STATE.quizIndex + 1} dari ${QUIZ_DATA.length}`;
+            document.getElementById('quiz-question-text').innerText = data.q;
+
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            data.ops.forEach((op, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-left text-xs sm:text-sm font-semibold text-white border border-slate-700 transition flex items-center gap-3";
+                btn.innerHTML = `<span class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold flex items-center justify-center">${String.fromCharCode(65+idx)}</span> ${op}`;
+                btn.onclick = () => checkQuizAnswer(idx);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback-box').className = "hidden";
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+        }
+
+        function checkQuizAnswer(selectedIdx) {
+            const data = QUIZ_DATA[APP_STATE.quizIndex];
+            const feedback = document.getElementById('quiz-feedback-box');
+            feedback.classList.remove('hidden');
+
+            if (selectedIdx === data.ans) {
+                AudioFX.playCorrect();
+                APP_STATE.quizScore += 20;
+                feedback.className = "p-4 rounded-xl text-xs sm:text-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-check"></i> Benar!</strong> ${data.exp}`;
+            } else {
+                AudioFX.playWrong();
+                feedback.className = "p-4 rounded-xl text-xs sm:text-sm bg-red-500/20 text-red-300 border border-red-500/40";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-xmark"></i> Kurang Tepat.</strong> ${data.exp}`;
+            }
+            document.getElementById('quiz-score-lbl').innerText = `Skor: ${APP_STATE.quizScore}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            if (APP_STATE.quizIndex < QUIZ_DATA.length - 1) {
+                APP_STATE.quizIndex++;
+                loadQuizQuestion();
+            } else {
+                alert(`Kuis Selesai! Skor Akhir Anda: ${APP_STATE.quizScore}`);
+                document.getElementById('quiz-cert-btn').classList.remove('hidden');
+                updateCertData();
+            }
+        }
+
+        /* CERTIFICATE DATA UPDATE ENGINE */
+        function updateCertData() {
+            const nameInput = document.getElementById('cert-student-name').value || "Ahmad Farhan";
+            const classInput = document.getElementById('cert-student-class').value || "X IPA 1 - SMAS Alhilaal Tehoru";
+            
+            document.getElementById('cert-display-name').innerText = nameInput.toUpperCase();
+            document.getElementById('cert-display-class').innerText = `Kelas / Satuan Pendidikan: ${classInput}`;
+
+            const qScore = APP_STATE.quizScore;
+            document.getElementById('cert-quiz-score').innerText = `${qScore} / 100`;
+
+            // Calculate overall evaluation or fallback score
+            const evalScore = parseFloat(document.getElementById('eval-score-num').innerText) || qScore || 85;
+            document.getElementById('cert-eval-score').innerText = evalScore.toFixed(1);
+
+            // Predicate
+            let pred = "SANGAT BAIK";
+            if (evalScore < 70) pred = "CUKUP";
+            else if (evalScore < 85) pred = "BAIK";
+            document.getElementById('cert-predicate').innerText = pred;
+
+            // Date
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('cert-date-text').innerText = dateStr;
+            document.getElementById('cert-date-num').innerText = today.getFullYear();
+        }
+
+        /* MINI GAMES HANDLERS */
+        function playMatchGame() { AudioFX.playClick(); alert("Fitur Game Match Besaran & Satuan Aktif!"); }
+        function playSortGame() { AudioFX.playClick(); alert("Fitur Game Categorization Pokok/Turunan Aktif!"); }
+        function playFlashGame() { AudioFX.playClick(); alert("Fitur Flashcard Satuan SI Aktif!"); }
+
+        /* EVALUASI AKHIR LOGIC */
+        function startEvaluation() {
+            AudioFX.playClick();
+            document.getElementById('eval-start-box').classList.add('hidden');
+            document.getElementById('eval-quiz-box').classList.remove('hidden');
+            // Timer Countdown
+            APP_STATE.evalTimerInterval = setInterval(() => {
+                APP_STATE.evalTimerSeconds--;
+                const m = Math.floor(APP_STATE.evalTimerSeconds / 60);
+                const s = APP_STATE.evalTimerSeconds % 60;
+                document.getElementById('eval-timer').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (APP_STATE.evalTimerSeconds <= 0) {
+                    clearInterval(APP_STATE.evalTimerInterval);
+                    finishEvaluation();
+                }
+            }, 1000);
+            loadEvalQuestion();
+        }
+
+        function loadEvalQuestion() {
+            const data = QUIZ_DATA[APP_STATE.evalIndex % QUIZ_DATA.length];
+            document.getElementById('eval-q-num').innerText = `Soal ${APP_STATE.evalIndex + 1} dari 15`;
+            document.getElementById('eval-question-text').innerText = data.q;
+
+            const container = document.getElementById('eval-options-container');
+            container.innerHTML = '';
+
+            data.ops.forEach((op, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-left text-xs sm:text-sm font-semibold text-white border border-slate-700 transition";
+                btn.innerText = op;
+                btn.onclick = () => {
+                    if (idx === data.ans) APP_STATE.evalCorrect++;
+                    else APP_STATE.evalWrong++;
+                    nextEvalQuestion();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function nextEvalQuestion() {
+            if (APP_STATE.evalIndex < 14) {
+                APP_STATE.evalIndex++;
+                loadEvalQuestion();
+            } else {
+                finishEvaluation();
+            }
+        }
+
+        function finishEvaluation() {
+            clearInterval(APP_STATE.evalTimerInterval);
+            document.getElementById('eval-quiz-box').classList.add('hidden');
+            document.getElementById('eval-result-box').classList.remove('hidden');
+
+            const score = Math.round((APP_STATE.evalCorrect / 15) * 100);
+            document.getElementById('eval-score-num').innerText = score;
+            document.getElementById('eval-correct-num').innerText = APP_STATE.evalCorrect;
+            document.getElementById('eval-wrong-num').innerText = APP_STATE.evalWrong;
+            updateCertData();
+        }
+
+        /* INITIALIZATION ON LOAD */
+        window.onload = function() {
+            convertUnit();
+            updateJangkaSim();
+            updateMikroSim();
+            updateNeracaSim();
+            loadQuizQuestion();
+            updateCertData();
+            
+            // Restore Progress
+            const saved = localStorage.getItem('alhilaal_fisika_progress');
+            if (saved) {
+                APP_STATE.completedTabs = new Set(JSON.parse(saved));
+                updateProgress();
+            }
+        };
+    </script>
+</body>
+</html>
